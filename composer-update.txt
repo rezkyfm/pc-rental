@@ -1,0 +1,5 @@
+To add the DomPDF library to your project, run this command in your terminal:
+
+composer require barryvdh/laravel-dompdf
+
+This will install the Laravel DomPDF package that we'll use to generate PDF invoices.

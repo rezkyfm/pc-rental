@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('rentals', RentalController::class)->except(['edit', 'update', 'destroy']);
     Route::post('/rentals/{rental}/complete', [RentalController::class, 'complete'])->name('rentals.complete');
     Route::post('/rentals/{rental}/cancel', [RentalController::class, 'cancel'])->name('rentals.cancel');
+    
+    // Invoices
+    Route::get('/rentals/{rental}/invoice/download', [InvoiceController::class, 'downloadInvoice'])->name('rentals.invoice.download');
+    Route::get('/rentals/{rental}/invoice/view', [InvoiceController::class, 'viewInvoice'])->name('rentals.invoice.view');
 
     // Payments
     Route::resource('payments', PaymentController::class)->except(['edit', 'update', 'destroy']);
@@ -62,8 +67,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/maintenance/{maintenance}/cancel', [MaintenanceController::class, 'cancel'])->name('maintenance.cancel');
 
     // Settings
-    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::get('/', [SettingController::class, 'index'])->name('index');
+        Route::post('/', [SettingController::class, 'update'])->name('update');
+        Route::get('/backup-restore', [SettingController::class, 'backupRestore'])->name('backup-restore');
+        Route::get('/theme', [SettingController::class, 'theme'])->name('theme');
+        Route::post('/theme', [SettingController::class, 'saveTheme'])->name('theme.save');
+        Route::get('/notifications', [SettingController::class, 'notifications'])->name('notifications');
+        Route::post('/notifications', [SettingController::class, 'saveNotifications'])->name('notifications.save');
+        Route::get('/export', [SettingController::class, 'export'])->name('export');
+        Route::post('/import', [SettingController::class, 'import'])->name('import');
+        Route::post('/reset', [SettingController::class, 'reset'])->name('reset');
+    });
 });
 
 // Customer Routes (requires authentication)
@@ -72,17 +87,22 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
     Route::post('/rent/{pc}', [HomeController::class, 'processRental'])->name('process-rental');
     Route::get('/rentals', [HomeController::class, 'myRentals'])->name('rentals');
     Route::get('/rentals/{rental}', [HomeController::class, 'rentalDetails'])->name('rental-details');
+    
+    // Invoice routes for customers
+    Route::get('/rentals/{rental}/invoice/download', [InvoiceController::class, 'downloadInvoice'])->name('rentals.invoice.download');
+    Route::get('/rentals/{rental}/invoice/view', [InvoiceController::class, 'viewInvoice'])->name('rentals.invoice.view');
 });
-// Admin Routes (requires admin or operator role)
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+
+// Admin Routes (requires admin role)
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Users management
     Route::resource('users', UserController::class);
 
-    // Component categories
-    Route::resource('component-categories', ComponentCategoryController::class);
+    // Component categories - Make sure to use the correct namespace
+    Route::resource('component-categories', App\Http\Controllers\Admin\ComponentCategoryController::class);
 
     // Components
     Route::resource('components', ComponentController::class);
@@ -94,6 +114,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('rentals', RentalController::class)->except(['edit', 'update', 'destroy']);
     Route::post('/rentals/{rental}/complete', [RentalController::class, 'complete'])->name('rentals.complete');
     Route::post('/rentals/{rental}/cancel', [RentalController::class, 'cancel'])->name('rentals.cancel');
+    
+    // Invoices for admin
+    Route::get('/rentals/{rental}/invoice/download', [InvoiceController::class, 'downloadInvoice'])->name('rentals.invoice.download');
+    Route::get('/rentals/{rental}/invoice/view', [InvoiceController::class, 'viewInvoice'])->name('rentals.invoice.view');
 
     // Payments
     Route::resource('payments', PaymentController::class)->except(['edit', 'update', 'destroy']);
@@ -105,7 +129,18 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/maintenance/{maintenance}/cancel', [MaintenanceController::class, 'cancel'])->name('maintenance.cancel');
 
     // Settings
-    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::get('/', [SettingController::class, 'index'])->name('index');
+        Route::post('/', [SettingController::class, 'update'])->name('update');
+        Route::get('/backup-restore', [SettingController::class, 'backupRestore'])->name('backup-restore');
+        Route::get('/theme', [SettingController::class, 'theme'])->name('theme');
+        Route::post('/theme', [SettingController::class, 'saveTheme'])->name('theme.save');
+        Route::get('/notifications', [SettingController::class, 'notifications'])->name('notifications');
+        Route::post('/notifications', [SettingController::class, 'saveNotifications'])->name('notifications.save');
+        Route::get('/export', [SettingController::class, 'export'])->name('export');
+        Route::post('/import', [SettingController::class, 'import'])->name('import');
+        Route::post('/reset', [SettingController::class, 'reset'])->name('reset');
+    });
 });
+
 require __DIR__ . '/auth.php';

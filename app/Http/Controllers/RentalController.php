@@ -27,13 +27,17 @@ class RentalController extends Controller
     /**
      * Show the form for creating a new rental.
      */
-    public function create()
+    public function create(Request $request)
     {
         $pcs = PC::where('status', 'available')->get();
         $customers = User::where('role', 'customer')->orderBy('name')->get();
         $depositPercentage = (float) Setting::getValue('deposit_percentage', 30);
-
-        return view('admin.rentals.create', compact('pcs', 'customers', 'depositPercentage'));
+        
+        // Handle pre-selected PC and date from calendar
+        $selectedPcId = $request->input('pc_id');
+        $selectedDate = $request->input('date');
+        
+        return view('admin.rentals.create', compact('pcs', 'customers', 'depositPercentage', 'selectedPcId', 'selectedDate'));
     }
 
     /**

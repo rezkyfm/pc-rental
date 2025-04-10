@@ -6,10 +6,10 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-            <h1 class="text-3xl font-extrabold text-gray-900">
+            <h1 class="text-3xl font-bold text-gray-900">
                 Browse Our Gaming PCs
             </h1>
-            <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                 Choose from our selection of high-performance gaming PCs available for rent.
             </p>
         </div>
@@ -19,7 +19,7 @@
             <form action="{{ route('pcs.browse') }}" method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                     <label for="sort" class="block text-sm font-medium text-gray-700">Sort By</label>
-                    <select id="sort" name="sort" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <select id="sort" name="sort" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 py-2 px-1 hover:cursor-pointer">
                         <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
                         <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
                         <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name: A to Z</option>
@@ -28,14 +28,14 @@
                 </div>
                 <div>
                     <label for="min_price" class="block text-sm font-medium text-gray-700">Min Price (per hour)</label>
-                    <input type="number" id="min_price" name="min_price" value="{{ request('min_price') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <input type="number" id="min_price" name="min_price" value="{{ request('min_price') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 py-2 px-1">
                 </div>
                 <div>
                     <label for="max_price" class="block text-sm font-medium text-gray-700">Max Price (per hour)</label>
-                    <input type="number" id="max_price" name="max_price" value="{{ request('max_price') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <input type="number" id="max_price" name="max_price" value="{{ request('max_price') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 py-2 px-1">
                 </div>
                 <div class="flex items-end">
-                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <button type="submit" class="w-full bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 hover:cursor-pointer">
                         Apply Filters
                     </button>
                 </div>
@@ -64,10 +64,10 @@
                     </div>
                     <div class="mt-6 flex justify-between items-center">
                         <div>
-                            <span class="text-lg font-bold text-blue-600">Rp {{ number_format($pc->rental_price_hourly, 0, ',', '.') }}</span>
+                            <span class="text-lg font-bold text-slate-600">Rp {{ number_format($pc->rental_price_hourly, 0, ',', '.') }}</span>
                             <span class="text-gray-500 text-sm">/hour</span>
                         </div>
-                        <a href="{{ route('pc.details', $pc) }}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">View Details</a>
+                        <a href="{{ route('pc.details', $pc) }}" class="inline-block bg-slate-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-slate-700 transition">View Details</a>
                     </div>
                 </div>
             </div>
