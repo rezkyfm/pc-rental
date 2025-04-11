@@ -17,6 +17,10 @@ cmd = '/assets/start.sh'
 "start.sh" = '''
 #!/bin/bash
 
+# Fix Laravel storage permissions
+chmod -R 777 /app/storage
+chmod -R 777 /app/bootstrap/cache
+
 # Transform the nginx configuration
 node /assets/scripts/prestart.mjs /assets/nginx.template.conf /etc/nginx.conf
 
