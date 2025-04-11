@@ -13,8 +13,14 @@ class SettingsSeeder extends Seeder
      */
     public function run(): void
     {
-        // Clear settings cache
-        Cache::forget('application_settings');
+        // Try to clear settings cache if available
+        try {
+            if (class_exists('\Illuminate\Support\Facades\Cache') && app()->bound('cache')) {
+                \Illuminate\Support\Facades\Cache::forget('application_settings');
+            }
+        } catch (\Exception $e) {
+            // Ignore cache errors during seeding
+        }
 
         // Define default settings for all categories
         $settings = [
@@ -82,8 +88,13 @@ class SettingsSeeder extends Seeder
             $this->command->info("Setting created/updated: {$key}");
         }
 
-        // Clear settings cache
-        Cache::forget('application_settings');
+        try {
+            if (class_exists('\Illuminate\Support\Facades\Cache') && app()->bound('cache')) {
+                \Illuminate\Support\Facades\Cache::forget('application_settings');
+            }
+        } catch (\Exception $e) {
+            // Ignore cache errors during seeding
+        }
 
         $this->command->info('All settings have been seeded successfully!');
     }

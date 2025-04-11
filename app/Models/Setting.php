@@ -22,6 +22,20 @@ class Setting extends Model
     ];
 
     /**
+     * Clear the settings cache safely.
+     */
+    public static function clearCache()
+    {
+        try {
+            if (app()->bound('cache')) {
+                Cache::forget('application_settings');
+            }
+        } catch (\Exception $e) {
+            // Ignore cache errors
+        }
+    }
+
+    /**
      * Get a setting value by key.
      *
      * @param string $key
@@ -30,12 +44,16 @@ class Setting extends Model
      */
     public static function getValue($key, $default = null)
     {
-        // Try to get from cache first
-        if (Cache::has('application_settings')) {
-            $settings = Cache::get('application_settings');
-            if (isset($settings[$key])) {
-                return self::castValue($settings[$key]);
+        try {
+            // Try to get from cache first
+            if (app()->bound('cache') && Cache::has('application_settings')) {
+                $settings = Cache::get('application_settings');
+                if (isset($settings[$key])) {
+                    return self::castValue($settings[$key]);
+                }
             }
+        } catch (\Exception $e) {
+            // Ignore cache errors
         }
 
         $setting = self::where('key', $key)->first();
@@ -64,8 +82,8 @@ class Setting extends Model
 
         $setting->save();
 
-        // Clear the cache so it will be regenerated next time
-        Cache::forget('application_settings');
+        // Clear the cache safely
+        self::clearCache();
 
         return $setting;
     }
@@ -77,16 +95,26 @@ class Setting extends Model
      */
     public static function getAllSettings()
     {
-        // Try to get from cache first
-        if (Cache::has('application_settings')) {
-            return Cache::get('application_settings');
+        try {
+            // Try to get from cache first
+            if (app()->bound('cache') && Cache::has('application_settings')) {
+                return Cache::get('application_settings');
+            }
+        } catch (\Exception $e) {
+            // Ignore cache errors
         }
 
-        // Get from database and cache it
+        // Get from database
         $settings = self::all()->pluck('value', 'key')->toArray();
         
-        // Cache for 24 hours
-        Cache::put('application_settings', $settings, 60 * 24);
+        try {
+            // Cache for 24 hours if cache is available
+            if (app()->bound('cache')) {
+                Cache::put('application_settings', $settings, 60 * 24);
+            }
+        } catch (\Exception $e) {
+            // Ignore cache errors
+        }
 
         return $settings;
     }
@@ -166,8 +194,8 @@ class Setting extends Model
     {
         $result = self::where('key', $key)->delete();
         
-        // Clear the cache
-        Cache::forget('application_settings');
+        // Clear the cache safely
+        self::clearCache();
         
         return $result;
     }

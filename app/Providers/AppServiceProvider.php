@@ -27,11 +27,33 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Initialize default settings if none exist
-        if (Schema::hasTable('settings') && Setting::count() === 0) {
-            // Initialize settings directly using the seeder
-            $seeder = new \Database\Seeders\SettingsSeeder();
-            $seeder->setContainer($this->app);
-            $seeder->run();
+        try {
+            if (Schema::hasTable('settings')) {
+                $settingsCount = Setting::count();
+                if ($settingsCount === 0) {
+                    // Initialize settings directly using the seeder
+                    $seeder = new \Database\Seeders\SettingsSeeder();
+                    $seeder->setContainer($this->app);
+                    
+                    // Handle the case where the Command class isn't available
+                    try {
+                        $command = $this->app->make(\Illuminate\Console\Command::class);
+                        $seeder->setCommand($command);
+                    } catch (\Exception $e) {
+                        // Command isn't available, use a simple stub
+                        $seeder->setCommand(new class extends \Illuminate\Console\Command {
+                            public function info($string, $verbosity = null) {}
+                        });
+                    }
+                    
+                    $seeder->run();
+                }
+            }
+        } catch (\Exception $e) {
+            // Log the error but don't crash the application
+            if ($this->app->bound('log')) {
+                $this->app->make('log')->error('Failed to initialize settings: ' . $e->getMessage());
+            }
         }
     }
 }
