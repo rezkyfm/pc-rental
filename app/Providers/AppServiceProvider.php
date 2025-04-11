@@ -28,8 +28,10 @@ class AppServiceProvider extends ServiceProvider
     {
         // Initialize default settings if none exist
         if (Schema::hasTable('settings') && Setting::count() === 0) {
-            $this->app->make('Illuminate\Contracts\Console\Kernel')
-                ->call('app:initialize-settings', ['--force' => true]);
+            // Initialize settings directly using the seeder
+            $seeder = new \Database\Seeders\SettingsSeeder();
+            $seeder->setContainer($this->app);
+            $seeder->run();
         }
     }
 }
