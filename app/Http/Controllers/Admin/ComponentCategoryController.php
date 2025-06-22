@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\ComponentCategory;
 use Illuminate\Http\Request;
 
@@ -12,8 +13,8 @@ class ComponentCategoryController extends Controller
      */
     public function index()
     {
-        $categories = ComponentCategory::withCount('components')->orderBy('name')->paginate(10);
-        return view('admin.component-categories.index', compact('categories'));
+        // This view will use the Livewire ComponentCategoryTable
+        return view('admin.component-categories.index');
     }
 
     /**
@@ -36,7 +37,7 @@ class ComponentCategoryController extends Controller
 
         ComponentCategory::create($validated);
 
-        return redirect()->route('component-categories.index')
+        return redirect()->route('admin.component-categories.index')
             ->with('success', 'Component category created successfully!');
     }
 
@@ -45,6 +46,9 @@ class ComponentCategoryController extends Controller
      */
     public function edit(ComponentCategory $componentCategory)
     {
+        // Load components relationship for displaying in the view
+        $componentCategory->load('components');
+        
         return view('admin.component-categories.edit', compact('componentCategory'));
     }
 
@@ -60,7 +64,7 @@ class ComponentCategoryController extends Controller
 
         $componentCategory->update($validated);
 
-        return redirect()->route('component-categories.index')
+        return redirect()->route('admin.component-categories.index')
             ->with('success', 'Component category updated successfully!');
     }
 
@@ -71,13 +75,13 @@ class ComponentCategoryController extends Controller
     {
         // Check if the category has components
         if ($componentCategory->components()->exists()) {
-            return redirect()->route('component-categories.index')
+            return redirect()->route('admin.component-categories.index')
                 ->with('error', 'Cannot delete category with associated components!');
         }
 
         $componentCategory->delete();
 
-        return redirect()->route('component-categories.index')
+        return redirect()->route('admin.component-categories.index')
             ->with('success', 'Component category deleted successfully!');
     }
 }

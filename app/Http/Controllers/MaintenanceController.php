@@ -76,7 +76,7 @@ class MaintenanceController extends Controller
 
             DB::commit();
 
-            return redirect()->route('maintenance.show', $maintenance)
+            return redirect()->route('admin.maintenance.show', $maintenance)
                 ->with('success', 'Maintenance record created successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -161,7 +161,7 @@ class MaintenanceController extends Controller
 
             DB::commit();
 
-            return redirect()->route('maintenance.show', $maintenance)
+            return redirect()->route('admin.maintenance.show', $maintenance)
                 ->with('success', 'Maintenance record updated successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -213,7 +213,7 @@ class MaintenanceController extends Controller
 
             DB::commit();
 
-            return redirect()->route('maintenance.show', $maintenance)
+            return redirect()->route('admin.maintenance.show', $maintenance)
                 ->with('success', 'Maintenance completed successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -255,7 +255,7 @@ class MaintenanceController extends Controller
 
             DB::commit();
 
-            return redirect()->route('maintenance.index')
+            return redirect()->route('admin.maintenance.index')
                 ->with('success', 'Maintenance cancelled successfully!');
         } catch (\Exception $e) {
             DB::rollBack();

@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-blue-800 border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-slate-800 border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -36,8 +36,10 @@
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 @guest
-                    <a href="{{ route('login') }}" class="text-white mr-4 hover:text-gray-300">Login</a>
-                    <a href="{{ route('register') }}" class="text-white hover:text-gray-300">Register</a>
+                    <div class="flex gap-6">
+                        <a href="{{ route('login') }}" class="text-white hover:text-gray-300">Login</a>
+                        <a href="{{ route('register') }}" class="text-white hover:text-gray-300">Register</a>
+                    </div>
                 @else
                     <div @click.away="open = false" class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center text-sm font-medium text-white hover:text-gray-300 focus:outline-none transition">
@@ -65,7 +67,7 @@
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-300 hover:bg-blue-700 focus:outline-none focus:bg-blue-700 focus:text-white transition">
+                <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-300 hover:bg-slate-700 focus:outline-none focus:bg-slate-700 focus:text-white transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': !open}" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': !open, 'inline-flex': open}" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -78,20 +80,20 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': !open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <a href="{{ route('home') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-blue-700 hover:text-white transition">
+            <a href="{{ route('home') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-slate-700 hover:text-white transition">
                 Home
             </a>
-            <a href="{{ route('home') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-blue-700 hover:text-white transition">
+            <a href="{{ route('home') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-slate-700 hover:text-white transition">
                 Browse PCs
             </a>
 
             @auth
                 @if (auth()->user()->role === 'customer')
-                    <a href="{{ route('customer.rentals') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-blue-700 hover:text-white transition">
+                    <a href="{{ route('customer.rentals') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-slate-700 hover:text-white transition">
                         My Rentals
                     </a>
                 @elseif (in_array(auth()->user()->role, ['admin', 'operator']))
-                    <a href="{{ route('admin.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-blue-700 hover:text-white transition">
+                    <a href="{{ route('admin.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-slate-700 hover:text-white transition">
                         Dashboard
                     </a>
                 @endif
@@ -110,7 +112,7 @@
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <a href="{{ route('logout') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-blue-700 hover:text-white transition" onclick="event.preventDefault(); this.closest('form').submit();">
+                        <a href="{{ route('logout') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-slate-700 hover:text-white transition" onclick="event.preventDefault(); this.closest('form').submit();">
                             Logout
                         </a>
                     </form>
@@ -118,10 +120,10 @@
             </div>
         @else
             <div class="pt-2 pb-3 space-y-1">
-                <a href="{{ route('login') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-blue-700 hover:text-white transition">
+                <a href="{{ route('login') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-slate-700 hover:text-white transition">
                     Login
                 </a>
-                <a href="{{ route('register') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-blue-700 hover:text-white transition">
+                <a href="{{ route('register') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-white hover:bg-slate-700 hover:text-white transition">
                     Register
                 </a>
             </div>

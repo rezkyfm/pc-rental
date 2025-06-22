@@ -170,15 +170,36 @@
                                 </div>
                             </div>
 
-                            @if($rental->status === 'active')
-                                <div class="border-t border-gray-200 pt-4">
-                                    <div class="text-sm font-medium text-gray-500 mb-2">Actions</div>
-                                    <a href="#"
-                                        class="block w-full text-center bg-red-600 text-white py-2 px-4 rounded-md font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition">
-                                        Request to Cancel Rental
+                            <div class="border-t border-gray-200 pt-4">
+                                <div class="text-sm font-medium text-gray-500 mb-2">Actions</div>
+                                
+                                <div class="space-y-2">
+                                    <!-- Invoice Buttons -->
+                                    <a href="{{ route('customer.rentals.invoice.download', $rental) }}" target="_blank"
+                                        class="block w-full text-center bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition flex items-center justify-center">
+                                        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                        Download Invoice
                                     </a>
+                                    
+                                    <a href="{{ route('customer.rentals.invoice.view', $rental) }}" target="_blank"
+                                        class="block w-full text-center bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition flex items-center justify-center">
+                                        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        View Invoice
+                                    </a>
+                                    
+                                    @if($rental->status === 'active')
+                                        <a href="#"
+                                            class="block w-full text-center bg-red-600 text-white py-2 px-4 rounded-md font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition">
+                                            Request to Cancel Rental
+                                        </a>
+                                    @endif
                                 </div>
-                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>
