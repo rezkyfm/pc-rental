@@ -175,7 +175,7 @@
                                         @endif
                                     </div>
                                     <div class="mt-3 text-xs text-gray-500">
-                                        Installed on {{ $component->pivot->installation_date->format('M d, Y') }}
+                                        Installed on {{ \Carbon\Carbon::parse($component->pivot->installation_date)->format('M d, Y') }}
                                     </div>
                                 </div>
                             </div>

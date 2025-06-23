@@ -98,7 +98,7 @@ class PCController extends Controller
      */
     public function show(PC $pc)
     {
-        $pc->load('components.category', 'rentals.user', 'maintenanceRecords.performer');
+        $pc->load('components.category', 'rentals.user');
         return view('admin.pcs.show', compact('pc'));
     }
 
